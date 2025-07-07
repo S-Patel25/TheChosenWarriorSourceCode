@@ -24,5 +24,5 @@ public:
 	void grantHeroWeaponAbilities(const TArray<FWarriorHeroAbilitySet>& inDefaultWeaponAbilities, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& outGrantedAbilitySpecHandles);
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability")
-	void removedGrantedHeroWeaponAbilities(UPARAM(ref) TArray<FGameplayAbilitySpecHandle>& inSpecHandlesToRemove); //adding UPARAM(ref) lets unreal know the var is not an out paramter
+	void removedGrantedHeroWeaponAbilities(UPARAM(ref) TArray<FGameplayAbilitySpecHandle>& inSpecHandlesToRemove); //adding UPARAM(ref) lets unreal know the var is not an out paramter, useful trick
 };
