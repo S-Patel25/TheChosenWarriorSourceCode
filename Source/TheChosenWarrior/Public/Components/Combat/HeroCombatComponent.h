@@ -1,0 +1,22 @@
+// All Rights Reserved
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Components/Combat/PawnCombatComponent.h"
+#include "HeroCombatComponent.generated.h"
+
+class AWarriorHeroWeapon;
+
+/**
+ * 
+ */
+UCLASS()
+class THECHOSENWARRIOR_API UHeroCombatComponent : public UPawnCombatComponent
+{
+	GENERATED_BODY()
+	
+public:
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
+	AWarriorHeroWeapon* getHeroCarriedWeaponByTag(FGameplayTag inWeaponTag) const;
+};

@@ -1,0 +1,21 @@
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+Content/
+.vscode/
+.vs/
+*.sln
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.VC.opendb
+*.exe
+*.dll
+*.lib
+*.pdb
+*.obj
+*.log
+*.dmp
+# Config/   (optional)
