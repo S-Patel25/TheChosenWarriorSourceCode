@@ -27,4 +27,9 @@ namespace ChosenWarriorGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Player_Event_Unequip_Axe, "Player.Event.Unequip.Axe");
 
 	UE_DEFINE_GAMEPLAY_TAG(Player_Status_JumpToFinisher, "Player.Status.JumpToFinisher");
+
+	//player input buffering tags
+	UE_DEFINE_GAMEPLAY_TAG(InputTag_ContinueAttack_Light, "InputTag.ContinueAttack.Light");
+	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_ContinueAttack_Light, "Player.Ability.ContinueAttack.Light");
+	UE_DEFINE_GAMEPLAY_TAG(Player_Event_TriggerAttack_Light, "Player.Event.TriggerAttack.Light");
 }

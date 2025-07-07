@@ -8,6 +8,8 @@
 #include "AbilitySystem/WarriorHeroGameplayAbility.h"
 #include "DataAsset_HeroStartUpData.generated.h"
 
+class UWarriorEnemyGameplayAbility;
+
 /**
  * 
  */
