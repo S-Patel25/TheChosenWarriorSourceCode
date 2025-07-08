@@ -9,6 +9,14 @@
 
 class AWarriorWeaponBase;
 
+UENUM(BlueprintType)
+enum class EToggleDamageType : uint8 //how they are doing the damage
+{
+	CurrentEquippedWeapon,
+	LeftHand,
+	RightHand
+};
+
 /**
  * 
  */
@@ -29,6 +37,11 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
 	AWarriorWeaponBase* getCharacterCurrentEquippedWeapon() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
+	void toggleWeaponCollision(bool bShouldEnable, EToggleDamageType toggleDamageType = EToggleDamageType::CurrentEquippedWeapon);
+
+
 
 private:
 	TMap<FGameplayTag, AWarriorWeaponBase*> characterCarriedWeaponMap; //can allow for multiple weapons to be stored!

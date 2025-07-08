@@ -23,8 +23,11 @@ class THECHOSENWARRIOR_API AHeroCharacter : public ATheChosenWarriorBaseCharacte
 	
 
 public:
-	
 	AHeroCharacter();
+
+	//Begin IPawnCombatInterface
+	virtual UPawnCombatComponent* getPawnCombatComponent() const override;
+	//End IPawnCombatInterface
 
 protected:
 	//Begin APawn Interface (follow UE best practices)

@@ -20,6 +20,11 @@ ATheChosenWarriorBaseCharacter::ATheChosenWarriorBaseCharacter()
 
 }
 
+UPawnCombatComponent* ATheChosenWarriorBaseCharacter::getPawnCombatComponent() const
+{
+	return nullptr;
+}
+
 UAbilitySystemComponent* ATheChosenWarriorBaseCharacter::GetAbilitySystemComponent() const
 {
 	return getWarriorAbilitySystemComponent(); //return getter

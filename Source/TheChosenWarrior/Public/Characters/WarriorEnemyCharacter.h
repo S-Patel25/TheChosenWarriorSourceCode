@@ -19,6 +19,10 @@ class THECHOSENWARRIOR_API AWarriorEnemyCharacter : public ATheChosenWarriorBase
 public:
 	AWarriorEnemyCharacter();
 
+	//Begin IPawnCombatInterface
+	virtual UPawnCombatComponent* getPawnCombatComponent() const override;
+	//End IPawnCombatInterface
+
 protected:
 	//Begin APawn Interface (follow UE best practices)
 	virtual void PossessedBy(AController* NewController) override;

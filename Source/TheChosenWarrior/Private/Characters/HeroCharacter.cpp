@@ -44,6 +44,11 @@ AHeroCharacter::AHeroCharacter()
 
 }
 
+UPawnCombatComponent* AHeroCharacter::getPawnCombatComponent() const
+{
+	return heroCombatComponent; //return hero
+}
+
 void AHeroCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
