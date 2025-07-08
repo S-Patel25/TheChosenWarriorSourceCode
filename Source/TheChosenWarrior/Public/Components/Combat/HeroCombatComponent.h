@@ -19,4 +19,7 @@ class THECHOSENWARRIOR_API UHeroCombatComponent : public UPawnCombatComponent
 public:
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
 	AWarriorHeroWeapon* getHeroCarriedWeaponByTag(FGameplayTag inWeaponTag) const;
+
+	virtual void OnHitTargetActor(AActor* hitActor) override;
+	virtual void OnWeaponPulledFromTargetActor(AActor* interactedActor) override;
 };
