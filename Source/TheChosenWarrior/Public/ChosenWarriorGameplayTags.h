@@ -30,8 +30,11 @@ namespace ChosenWarriorGameplayTags //gameplay tags are a better way to handle i
 
 	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Status_JumpToFinisher);
 
+	/* Enemy Tags! */
+	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Weapon);
 
-	//Input buffering tags
+
+	/* Input Buffer Tags */
 	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_ContinueAttack_Light);
 	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_ContinueAttack_Light);
 	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Event_TriggerAttack_Light);
