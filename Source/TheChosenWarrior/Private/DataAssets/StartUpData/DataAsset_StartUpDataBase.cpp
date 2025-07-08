@@ -11,6 +11,21 @@ void UDataAsset_StartUpDataBase::GiveToAbilitySystemComponent(UWarriorAbilitySys
 
 	grantAbilities(activateOnGivenAbilities, inASCToGive, ApplyLevel);
 	grantAbilities(reactiveAbilities, inASCToGive, ApplyLevel);
+
+	if (!startUpGameplayEffects.IsEmpty())
+	{
+		for (const TSubclassOf < UGameplayEffect >& effectClass : startUpGameplayEffects)
+		{
+			if (!effectClass) continue;
+
+			UGameplayEffect* effectCDO = effectClass->GetDefaultObject<UGameplayEffect>(); //give char attributes to player
+			inASCToGive->ApplyGameplayEffectToSelf(
+				effectCDO,
+				ApplyLevel,
+				inASCToGive->MakeEffectContext()
+			);
+		}
+	}
 }
 
 void UDataAsset_StartUpDataBase::grantAbilities(const TArray<TSubclassOf<UWarriorGameplayAbility>>& inAbilitiesToGive, UWarriorAbilitySystemComponent* inASCToGive, int32 ApplyLevel)
@@ -31,6 +46,6 @@ void UDataAsset_StartUpDataBase::grantAbilities(const TArray<TSubclassOf<UWarrio
 		abilitySpec.SourceObject = inASCToGive->GetAvatarActor(); //set attributes to ability, then give it to the ASC (ability system component) or "character"
 		abilitySpec.Level = ApplyLevel;
 
-		inASCToGive->GiveAbility(abilitySpec); 
+		inASCToGive->GiveAbility(abilitySpec);
 	}
 }
