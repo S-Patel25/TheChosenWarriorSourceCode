@@ -33,6 +33,11 @@ namespace ChosenWarriorGameplayTags //gameplay tags are a better way to handle i
 	/* Enemy Tags! */
 	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Weapon);
 
+	/* Shared Tags*/
+	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Event_MeleeHit);
+
+	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_SetByCaller_BaseDamage);
+
 
 	/* Input Buffer Tags */
 	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_ContinueAttack_Light);

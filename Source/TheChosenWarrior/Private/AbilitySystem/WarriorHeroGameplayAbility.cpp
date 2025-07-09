@@ -4,6 +4,8 @@
 #include "AbilitySystem/WarriorHeroGameplayAbility.h"
 #include "Characters/HeroCharacter.h"
 #include "TheChosenWarriorHeroController.h"
+#include "AbilitySystem/WarriorAbilitySystemComponent.h"
+#include "ChosenWarriorGameplayTags.h"
 
 AHeroCharacter* UWarriorHeroGameplayAbility::getHeroCharacterFromActorInfo()
 {
@@ -29,4 +31,32 @@ ATheChosenWarriorHeroController* UWarriorHeroGameplayAbility::getHeroControllerF
 UHeroCombatComponent* UWarriorHeroGameplayAbility::getHeroCombatComponentFromActorInfo()
 {
 	return getHeroCharacterFromActorInfo()->getHeroCombatComponent();
+}
+
+FGameplayEffectSpecHandle UWarriorHeroGameplayAbility::makeHeroDamageEffectSpecHandle(TSubclassOf<UGameplayEffect> effectClass, float inWeaponBaseDamage, FGameplayTag inCurrentAttackTypeTag, int32 inCurrentComboCount)
+{
+	check(effectClass);
+
+	FGameplayEffectContextHandle contextHandle = getWarriorAbilitySystemComponentComponentFromActorInfo()->MakeEffectContext();
+	contextHandle.SetAbility(this);
+	contextHandle.AddSourceObject(GetAvatarActorFromActorInfo());
+	contextHandle.AddInstigator(GetAvatarActorFromActorInfo(), GetAvatarActorFromActorInfo());
+
+	FGameplayEffectSpecHandle effectSpecHandle = getWarriorAbilitySystemComponentComponentFromActorInfo()->MakeOutgoingSpec(  //returns spec handle
+		effectClass,
+		GetAbilityLevel(),
+		contextHandle
+	);
+
+	effectSpecHandle.Data->SetSetByCallerMagnitude( //emplacing values into a t map
+		ChosenWarriorGameplayTags::Shared_SetByCaller_BaseDamage,
+		inWeaponBaseDamage
+	);
+
+	if (inCurrentAttackTypeTag.IsValid())
+	{
+		effectSpecHandle.Data->SetSetByCallerMagnitude(inCurrentAttackTypeTag, inCurrentComboCount);
+	}
+
+	return effectSpecHandle;
 }

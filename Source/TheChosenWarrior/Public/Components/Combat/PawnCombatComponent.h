@@ -44,6 +44,9 @@ public:
 	virtual void OnHitTargetActor(AActor* hitActor);
 	virtual void OnWeaponPulledFromTargetActor(AActor* interactedActor);
 
+protected:
+	TArray<AActor*> overlappedActors;
+
 
 
 private:

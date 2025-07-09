@@ -3,6 +3,8 @@
 
 #include "Components/Combat/HeroCombatComponent.h"
 #include "Items/Weapons/WarriorHeroWeapon.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "ChosenWarriorGameplayTags.h"
 
 #include "WarriorDebugHelpers.h"
 
@@ -13,10 +15,25 @@ AWarriorHeroWeapon* UHeroCombatComponent::getHeroCarriedWeaponByTag(FGameplayTag
 
 void UHeroCombatComponent::OnHitTargetActor(AActor* hitActor)
 {
-    Debug::Print(getOwningPawn()->GetActorNameOrLabel() + TEXT(" hit ") + hitActor->GetActorNameOrLabel(), FColor::Yellow);
+    if (overlappedActors.Contains(hitActor))
+    {
+        return;
+    }
+
+    overlappedActors.AddUnique(hitActor);
+
+    FGameplayEventData Data;
+    Data.Instigator = getOwningPawn();
+    Data.Target = hitActor;
+
+    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor( //bp func 
+        getOwningPawn(),
+        ChosenWarriorGameplayTags::Shared_Event_MeleeHit,
+        Data
+    );
 }
 
 void UHeroCombatComponent::OnWeaponPulledFromTargetActor(AActor* interactedActor)
 {
-    Debug::Print(getOwningPawn()->GetActorNameOrLabel() + TEXT("'s weapon pulled from ") + interactedActor->GetActorNameOrLabel(), FColor::Red);
+
 }
