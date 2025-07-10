@@ -42,13 +42,18 @@ public:
 	FGameplayAttributeData maxRage;
 	ATTRIBUTE_ACCESSORS(UWarriorAttributeSet, maxRage);
 
-	UPROPERTY(BlueprintReadOnly, Category = "Rage")
+	UPROPERTY(BlueprintReadOnly, Category = "Damage")
 	FGameplayAttributeData attackPower;
 	ATTRIBUTE_ACCESSORS(UWarriorAttributeSet, attackPower);
 
-	UPROPERTY(BlueprintReadOnly, Category = "Rage")
+	UPROPERTY(BlueprintReadOnly, Category = "Damage")
 	FGameplayAttributeData defensePower;
 	ATTRIBUTE_ACCESSORS(UWarriorAttributeSet, defensePower);
+
+	UPROPERTY(BlueprintReadOnly, Category = "Damage")
+	FGameplayAttributeData damageTaken; 
+	ATTRIBUTE_ACCESSORS(UWarriorAttributeSet, damageTaken);
+
 
 
 
