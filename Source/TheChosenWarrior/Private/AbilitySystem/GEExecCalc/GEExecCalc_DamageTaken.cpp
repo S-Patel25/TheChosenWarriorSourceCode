@@ -62,7 +62,7 @@ void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustom
 
 	float sourceAttackPower = 0.f;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(getWarriorDamageCapture().attackPowerDef, evaluateParameters, sourceAttackPower);
-	Debug::Print(TEXT("sourceAttackPower"), sourceAttackPower);
+	//Debug::Print(TEXT("sourceAttackPower"), sourceAttackPower);
 
 
 	float baseDamage = 0.f;
@@ -74,32 +74,32 @@ void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustom
 		if (tagMagnitude.Key.MatchesTagExact(ChosenWarriorGameplayTags::Shared_SetByCaller_BaseDamage))
 		{
 			baseDamage = tagMagnitude.Value; //get val from the tag
-			Debug::Print(TEXT("baseDamage"), baseDamage);
+			//Debug::Print(TEXT("baseDamage"), baseDamage);
 		}
 
 		if (tagMagnitude.Key.MatchesTagExact(ChosenWarriorGameplayTags::Player_SetByCaller_AttackType_Light))
 		{
 			usedLightAttackComboCount = tagMagnitude.Value;
-			Debug::Print(TEXT("usedLightAttackComboCount"), usedLightAttackComboCount);
+			//Debug::Print(TEXT("usedLightAttackComboCount"), usedLightAttackComboCount);
 		}
 
 		if (tagMagnitude.Key.MatchesTagExact(ChosenWarriorGameplayTags::Player_SetByCaller_AttackType_Heavy))
 		{
 			usedHeavyAttackComboCount = tagMagnitude.Value;
-			Debug::Print(TEXT("usedHeavyAttackComboCount"), usedHeavyAttackComboCount);
+			//Debug::Print(TEXT("usedHeavyAttackComboCount"), usedHeavyAttackComboCount);
 		}
 	}
 
 	float targetDefensePower = 0.f;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(getWarriorDamageCapture().defensePowerDef, evaluateParameters, targetDefensePower);
-	Debug::Print(TEXT("targetDefensePower"), targetDefensePower);
+	//Debug::Print(TEXT("targetDefensePower"), targetDefensePower);
 
 	if (usedLightAttackComboCount != 0) //increase damage based on where combo count is (reward for doing full combo)
 	{
 		const float damageIncreasePercentLight = (usedLightAttackComboCount - 1) * 0.07 + 1.f;
 
 		baseDamage *= damageIncreasePercentLight;
-		Debug::Print(TEXT("damageIncreasePercentLight"), baseDamage);
+		//Debug::Print(TEXT("damageIncreasePercentLight"), baseDamage);
 	}
 
 	if (usedHeavyAttackComboCount != 0)
@@ -107,7 +107,7 @@ void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustom
 		const float damageIncreasePercentHeavy = (usedHeavyAttackComboCount - 1) * 0.15f + 1.f;
 
 		baseDamage *= damageIncreasePercentHeavy;
-		Debug::Print(TEXT("damageIncreasePercentHeavy"), baseDamage);
+		//Debug::Print(TEXT("damageIncreasePercentHeavy"), baseDamage);
 
 	}
 

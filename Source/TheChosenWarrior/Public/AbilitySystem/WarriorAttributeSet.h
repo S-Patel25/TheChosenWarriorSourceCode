@@ -26,6 +26,8 @@ class THECHOSENWARRIOR_API UWarriorAttributeSet : public UAttributeSet
 public:
 	UWarriorAttributeSet();
 
+	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Health")
 	FGameplayAttributeData currentHealth;
 	ATTRIBUTE_ACCESSORS(UWarriorAttributeSet, currentHealth);
