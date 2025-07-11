@@ -112,7 +112,7 @@ void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustom
 	}
 
 	const float finalDamageDone = baseDamage * sourceAttackPower / targetDefensePower; //easy way to calculate final damage done
-	Debug::Print(TEXT("finalDamageDone"), finalDamageDone);
+	//Debug::Print(TEXT("finalDamageDone"), finalDamageDone);
 
 	if (finalDamageDone > 0.f)
 	{
