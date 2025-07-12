@@ -17,3 +17,15 @@ void UWarriorWidgetBase::NativeOnInitialized()
 	}
 }
 
+void UWarriorWidgetBase::initEnemyCreateWidget(AActor* owningEnemyActor)
+{
+	if (IPawnUIInterface* pawnUIInterface = Cast<IPawnUIInterface>(owningEnemyActor))
+	{
+		UEnemyUIComponent* enemyUIComponent = pawnUIInterface->getEnemyUIComponent();
+
+		checkf(enemyUIComponent, TEXT("Failed to get enemyUIComponent!"));
+
+		BP_OnOwningEnemyUIComponentInitialized(enemyUIComponent);
+	}
+}
+
