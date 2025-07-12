@@ -30,6 +30,11 @@ UAbilitySystemComponent* ATheChosenWarriorBaseCharacter::GetAbilitySystemCompone
 	return getWarriorAbilitySystemComponent(); //return getter
 }
 
+UPawnUIComponent* ATheChosenWarriorBaseCharacter::getPawnUIComponent() const
+{
+	return nullptr;
+}
+
 void ATheChosenWarriorBaseCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);

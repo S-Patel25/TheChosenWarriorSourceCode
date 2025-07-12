@@ -7,6 +7,8 @@
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "WarriorAttributeSet.generated.h"
 
+class IPawnUIInterface;
+
 //helper functions for attributes
 
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
@@ -14,6 +16,8 @@ GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
+
+
 
 /**
  * 
@@ -58,7 +62,8 @@ public:
 
 
 
-
+private:
+	TWeakInterfacePtr<IPawnUIInterface> cachedPawnUIInterface; //caching so we dont call cast everytime execute happens
 
 	
 };

@@ -13,6 +13,8 @@
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "DataAssets/StartUpData/DataAsset_HeroStartUpData.h"
 #include "Components/Combat/HeroCombatComponent.h"
+#include "Components/UI/HeroUIComponent.h"
+
 
 #include "WarriorDebugHelpers.h"
 
@@ -40,6 +42,7 @@ AHeroCharacter::AHeroCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
 	heroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("Hero Combat Component"));
+	heroUIComponent = CreateDefaultSubobject<UHeroUIComponent>(TEXT("Hero UI Component"));
 
 
 }
@@ -47,6 +50,16 @@ AHeroCharacter::AHeroCharacter()
 UPawnCombatComponent* AHeroCharacter::getPawnCombatComponent() const
 {
 	return heroCombatComponent; //return hero
+}
+
+UPawnUIComponent* AHeroCharacter::getPawnUIComponent() const
+{
+	return heroUIComponent;
+}
+
+UHeroUIComponent* AHeroCharacter::getHeroUIComponent() const
+{
+	return heroUIComponent;
 }
 
 void AHeroCharacter::PossessedBy(AController* NewController)

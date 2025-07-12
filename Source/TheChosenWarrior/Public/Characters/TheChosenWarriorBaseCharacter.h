@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "Interfaces/PawnCombatInterface.h"
+#include "Interfaces/PawnUIInterface.h"
 #include "TheChosenWarriorBaseCharacter.generated.h"
 
 class UWarriorAbilitySystemComponent;
@@ -13,7 +14,7 @@ class UWarriorAttributeSet;
 class UDataAsset_StartUpDataBase;
 
 UCLASS()
-class THECHOSENWARRIOR_API ATheChosenWarriorBaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnCombatInterface //easy way to handle the collision stuff with the pawn interface
+class THECHOSENWARRIOR_API ATheChosenWarriorBaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnCombatInterface, public IPawnUIInterface //easy way to handle the collision stuff with the pawn interface
 {
 	GENERATED_BODY()
 
@@ -29,6 +30,9 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	//End IAbilitySystemInterface
 
+	//Begin IPawnUIInterface
+	virtual UPawnUIComponent* getPawnUIComponent() const override;
+	//End IPawnUIInterface
 protected:
 	
 	//Begin APawn Interface (follow UE best practices)
