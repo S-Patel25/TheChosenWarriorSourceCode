@@ -8,6 +8,7 @@
 
 class UEnemyCombatComponent;
 class UEnemyUIComponent;
+class UWidgetComponent;
 
 /**
  * 
@@ -25,6 +26,9 @@ public:
 	//End IPawnCombatInterface
 
 protected:
+
+	virtual void BeginPlay() override;
+
 	//Begin APawn Interface (follow UE best practices)
 	virtual void PossessedBy(AController* NewController) override;
 	//End APawn Interface
@@ -39,6 +43,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
 	UEnemyUIComponent* enemyUIComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	UWidgetComponent* enemyHealthWidgetComponent;
 
 private:
 	void initEnemyStartUpData();
