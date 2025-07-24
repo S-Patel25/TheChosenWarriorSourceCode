@@ -5,17 +5,13 @@
 #include "Navigation/CrowdFollowingComponent.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 #include "WarriorDebugHelpers.h"
 
 AWarriorAIController::AWarriorAIController(const FObjectInitializer& objectInitializer)
 	: Super(objectInitializer.SetDefaultSubobjectClass<UCrowdFollowingComponent>("PathFollowingComponent")) //overriding
 {
-	if (UCrowdFollowingComponent* crowdComp = Cast<UCrowdFollowingComponent>(GetPathFollowingComponent()))
-	{
-		Debug::Print(TEXT("Valid comp!"), FColor::Green);
-	}
-
 	AISenseConfig_Sight = CreateDefaultSubobject<UAISenseConfig_Sight>("Enemy Sense Config");
 	AISenseConfig_Sight->DetectionByAffiliation.bDetectEnemies = true; //make sure it sees hostile pawns
 	AISenseConfig_Sight->DetectionByAffiliation.bDetectFriendlies = false; //dont detect same type
@@ -46,10 +42,38 @@ ETeamAttitude::Type AWarriorAIController::GetTeamAttitudeTowards(const AActor& O
 	return ETeamAttitude::Friendly;
 }
 
+void AWarriorAIController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (UCrowdFollowingComponent* crowdComp = Cast<UCrowdFollowingComponent>(GetPathFollowingComponent())) //improving quality of AI avoidance inside the if statement
+	{
+		crowdComp->SetCrowdSimulationState(bEnableDetourCrowdAvoidance ? ECrowdSimulationState::Enabled : ECrowdSimulationState::Disabled);
+
+		switch (detourCrowdAvoidanceQuality)
+		{
+		case 1: crowdComp->SetCrowdAvoidanceQuality(ECrowdAvoidanceQuality::Low);    break;
+		case 2: crowdComp->SetCrowdAvoidanceQuality(ECrowdAvoidanceQuality::Medium); break;
+		case 3: crowdComp->SetCrowdAvoidanceQuality(ECrowdAvoidanceQuality::Good);   break;
+		case 4: crowdComp->SetCrowdAvoidanceQuality(ECrowdAvoidanceQuality::High);   break;
+		default:
+			break;
+		}
+
+		crowdComp->SetAvoidanceGroup(1);
+		crowdComp->SetGroupsToAvoid(1);
+		crowdComp->SetCrowdCollisionQueryRange(collisionQueryRange);
+	}
+
+}
+
 void AWarriorAIController::OnEnemyPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
 	if (Stimulus.WasSuccessfullySensed() && Actor)
 	{
-		Debug::Print(Actor->GetActorNameOrLabel() + TEXT(" was sensed"), FColor::Green);
+		if (UBlackboardComponent* blackBoardComponent = GetBlackboardComponent())
+		{
+			blackBoardComponent->SetValueAsObject(FName("TargetActor"), Actor); //so enemies know who target actor is, fname must be same as the name set in bb
+		}
 	}
 }
