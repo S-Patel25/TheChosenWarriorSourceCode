@@ -34,7 +34,7 @@ ETeamAttitude::Type AWarriorAIController::GetTeamAttitudeTowards(const AActor& O
 
 	const IGenericTeamAgentInterface* otherTeamAgent = Cast<const IGenericTeamAgentInterface>(pawnToCheck->GetController());
 
-	if (otherTeamAgent && otherTeamAgent->GetGenericTeamId() != GetGenericTeamId()) //check to see if its our enemy
+	if (otherTeamAgent && otherTeamAgent->GetGenericTeamId() < GetGenericTeamId()) //check to see if its our enemy and avoid the eqs test pawn
 	{
 		return ETeamAttitude::Hostile;
 	}
@@ -69,11 +69,14 @@ void AWarriorAIController::BeginPlay()
 
 void AWarriorAIController::OnEnemyPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
-	if (Stimulus.WasSuccessfullySensed() && Actor)
+	if (UBlackboardComponent* blackBoardComponent = GetBlackboardComponent())
 	{
-		if (UBlackboardComponent* blackBoardComponent = GetBlackboardComponent())
+		if (!blackBoardComponent->GetValueAsObject(FName("TargetActor")))
 		{
-			blackBoardComponent->SetValueAsObject(FName("TargetActor"), Actor); //so enemies know who target actor is, fname must be same as the name set in bb
+			if (Stimulus.WasSuccessfullySensed() && Actor)
+			{
+				blackBoardComponent->SetValueAsObject(FName("TargetActor"), Actor); //so enemies know who target actor is, fname must be same as the name set in bb
+			}
 		}
 	}
 }

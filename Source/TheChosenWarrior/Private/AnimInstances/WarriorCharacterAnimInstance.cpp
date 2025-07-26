@@ -4,6 +4,7 @@
 #include "AnimInstances/WarriorCharacterAnimInstance.h"
 #include "Characters/TheChosenWarriorBaseCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "KismetAnimationLibrary.h"
 
 void UWarriorCharacterAnimInstance::NativeInitializeAnimation()
 {
@@ -26,4 +27,5 @@ void UWarriorCharacterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaS
 
 	bHasAcceleration = owningMovementComponent->GetCurrentAcceleration().SizeSquared2D() > 0.f; //if true means acceleration!
 
+	locomotionDirection = UKismetAnimationLibrary::CalculateDirection(owningCharacter->GetVelocity(), owningCharacter->GetActorRotation());
 }

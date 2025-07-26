@@ -40,6 +40,8 @@ namespace ChosenWarriorGameplayTags //gameplay tags are a better way to handle i
 
 	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Weapon);
 
+	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Status_Strafing);
+
 	/* Shared Tags*/
 	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Ability_HitReact);
 	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Ability_Death);
