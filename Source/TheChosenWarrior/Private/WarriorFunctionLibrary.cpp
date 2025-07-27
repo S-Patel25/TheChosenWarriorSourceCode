@@ -5,6 +5,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Interfaces/PawnCombatInterface.h"
+#include "GenericTeamAgentInterface.h"
 
 UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorASCFromActor(AActor* InActor)
 {
@@ -66,4 +67,19 @@ UPawnCombatComponent* UWarriorFunctionLibrary::BP_GetPawnCombatComponentFromActo
 	outValidType = combatComponent? EWarriorValidType::Valid : EWarriorValidType::Invalid;
 
 	return combatComponent;
+}
+
+bool UWarriorFunctionLibrary::isTargetPawnHostile(APawn* queryPawn, APawn* targetPawn)
+{
+	check(queryPawn && targetPawn);
+
+	IGenericTeamAgentInterface* queryTeamAgent = Cast<IGenericTeamAgentInterface>(queryPawn->GetController());
+	IGenericTeamAgentInterface* targetTeamAgent = Cast<IGenericTeamAgentInterface>(targetPawn->GetController());
+
+	if (queryTeamAgent && targetTeamAgent)
+	{
+		return queryTeamAgent->GetGenericTeamId() != targetTeamAgent->GetGenericTeamId(); //if they have diff ID's, means they are hostile (not same enemy or etc.)
+	}
+
+	return false;
 }

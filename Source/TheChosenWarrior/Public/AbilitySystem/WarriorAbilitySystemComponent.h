@@ -25,4 +25,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability")
 	void removedGrantedHeroWeaponAbilities(UPARAM(ref) TArray<FGameplayAbilitySpecHandle>& inSpecHandlesToRemove); //adding UPARAM(ref) lets unreal know the var is not an out paramter, useful trick
+
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability")
+	bool tryActivateAbilityByTag(FGameplayTag abilityTagToActivate);
 };
