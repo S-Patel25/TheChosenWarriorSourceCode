@@ -16,7 +16,8 @@ public class TheChosenWarrior : ModuleRules
 			"EnhancedInput",
 			"GameplayTags",
 			"GameplayTasks",
-			"AnimGraphRuntime"});
+			"AnimGraphRuntime",
+			"MotionWarping"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

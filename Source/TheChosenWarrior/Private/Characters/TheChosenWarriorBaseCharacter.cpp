@@ -4,6 +4,7 @@
 #include "Characters/TheChosenWarriorBaseCharacter.h"
 #include "AbilitySystem/WarriorAttributeSet.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
+#include "MotionWarpingComponent.h"
 
 // Sets default values
 ATheChosenWarriorBaseCharacter::ATheChosenWarriorBaseCharacter()
@@ -18,6 +19,7 @@ ATheChosenWarriorBaseCharacter::ATheChosenWarriorBaseCharacter()
 	warriorAbilitySystemComponent = CreateDefaultSubobject<UWarriorAbilitySystemComponent>(TEXT("WarriorAbilitySystemComponent"));
 	warriorAttributeSet = CreateDefaultSubobject<UWarriorAttributeSet>(TEXT("WarriorAttributeSet"));
 
+	motionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarpingComponent"));
 }
 
 UPawnCombatComponent* ATheChosenWarriorBaseCharacter::getPawnCombatComponent() const
