@@ -6,6 +6,8 @@
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Interfaces/PawnCombatInterface.h"
 #include "GenericTeamAgentInterface.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "ChosenWarriorGameplayTags.h"
 
 UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorASCFromActor(AActor* InActor)
 {
@@ -82,4 +84,46 @@ bool UWarriorFunctionLibrary::isTargetPawnHostile(APawn* queryPawn, APawn* targe
 	}
 
 	return false;
+}
+
+float UWarriorFunctionLibrary::getScalableFloatValueAtLevel(const FScalableFloat& inScalableFloat, float inLevel)
+{
+	return inScalableFloat.GetValueAtLevel(inLevel);
+}
+
+FGameplayTag UWarriorFunctionLibrary::computeHitReactDirectionTag(AActor* inAttacker, AActor* inVictim, float& outAngleDifference)
+{
+	check(inAttacker && inVictim);
+
+	const FVector victimForward = inVictim->GetActorForwardVector();
+	const FVector victimToAttackerNormalized = (inAttacker->GetActorLocation() - inVictim->GetActorLocation()).GetSafeNormal(); //make sure to always have the get safe normal
+
+	const float dotResult = FVector::DotProduct(victimForward, victimToAttackerNormalized);
+	outAngleDifference = UKismetMathLibrary::DegAcos(dotResult);
+
+	const FVector crossResult = FVector::CrossProduct(victimForward, victimToAttackerNormalized); //cross product needed as dot only gets +ve values (so cant tell left or right)
+
+	if (crossResult.Z < 0.f) //pointing down
+	{
+		outAngleDifference = -1.f;
+	}
+
+	if (outAngleDifference >= -45.f && outAngleDifference <= 45.f) //front
+	{
+		return ChosenWarriorGameplayTags::Shared_Status_HitReact_Front;
+	}
+	else if (outAngleDifference < -45.f && outAngleDifference >= -135.f) //left
+	{
+		return ChosenWarriorGameplayTags::Shared_Status_HitReact_Left;
+	}
+	else if (outAngleDifference < -135.f || outAngleDifference > 135.f) //back
+	{
+		return ChosenWarriorGameplayTags::Shared_Status_HitReact_Back;
+	}
+	else if (outAngleDifference > 45.f && outAngleDifference <= 135.f) //right
+	{
+		return ChosenWarriorGameplayTags::Shared_Status_HitReact_Right;
+	}
+
+	return ChosenWarriorGameplayTags::Shared_Status_HitReact_Front;
 }

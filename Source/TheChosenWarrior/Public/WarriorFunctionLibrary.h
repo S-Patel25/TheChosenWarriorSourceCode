@@ -9,6 +9,7 @@
 
 class UWarriorAbilitySystemComponent;
 class UPawnCombatComponent;
+struct FScalableFloat;
 
 /**
  * 
@@ -40,5 +41,11 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Warrior|FunctionLibrary")
 	static bool isTargetPawnHostile(APawn* queryPawn, APawn* targetPawn);
+
+	UFUNCTION(BlueprintPure, Category = "Warrior|FunctionLibrary", meta = (CompactNodeTitle = "Get Value at Level"))
+	static float getScalableFloatValueAtLevel(const FScalableFloat& inScalableFloat, float inLevel = 1.f);
+
+	UFUNCTION(BlueprintPure, Category = "Warrior|FunctionLibrary")
+	static FGameplayTag computeHitReactDirectionTag(AActor* inAttacker, AActor* inVictim, float& outAngleDifference);
 
 };
