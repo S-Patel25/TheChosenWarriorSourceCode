@@ -9,6 +9,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "ChosenWarriorGameplayTags.h"
 
+#include "WarriorDebugHelpers.h"
+
 UWarriorAbilitySystemComponent* UWarriorFunctionLibrary::NativeGetWarriorASCFromActor(AActor* InActor)
 {
 	check(InActor);
@@ -126,4 +128,13 @@ FGameplayTag UWarriorFunctionLibrary::computeHitReactDirectionTag(AActor* inAtta
 	}
 
 	return ChosenWarriorGameplayTags::Shared_Status_HitReact_Front;
+}
+
+bool UWarriorFunctionLibrary::isValidBlock(AActor* inAttacker, AActor* inDefender)
+{
+	check(inAttacker && inDefender);
+
+	const float dotResult = FVector::DotProduct(inAttacker->GetActorForwardVector(), inDefender->GetActorForwardVector());
+
+	return dotResult < 0.1f; //if less then 0 then it means they are facing each other so can block! (tweak numbers as needed)
 }
