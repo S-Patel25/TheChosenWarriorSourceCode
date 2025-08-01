@@ -7,6 +7,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "Widgets/WarriorWidgetBase.h"
 #include "TheChosenWarriorHeroController.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
+#include "Blueprint/WidgetTree.h"
+#include "Components/SizeBox.h"
 
 
 #include "WarriorDebugHelpers.h"
@@ -40,6 +43,7 @@ void UHeroGameplayAbility_TargetLock::tryLockOnTarget()
 	if (currentLockedActor)
 	{
 		drawTargetLockWidget();
+		setTargetLockWidgetPosition();
 	}
 	else
 	{
@@ -96,6 +100,44 @@ void UHeroGameplayAbility_TargetLock::drawTargetLockWidget()
 
 		drawnTargetLockWidget->AddToViewport();
 	}
+}
+
+void UHeroGameplayAbility_TargetLock::setTargetLockWidgetPosition()
+{
+	if (!drawnTargetLockWidget || !currentLockedActor)
+	{
+		cancelTargetLockAbility();
+		return;
+	}
+
+	//converts 3d to 2d (gets vector to screen position)
+	FVector2D screenPosition;
+	UWidgetLayoutLibrary::ProjectWorldLocationToWidgetPosition(
+		getHeroControllerFromActorInfo(),
+		currentLockedActor->GetActorLocation(),
+		screenPosition,
+		true
+	); 
+
+	if (targetLockWidgetSize == FVector2D::ZeroVector) //only loop if its needed
+	{
+		drawnTargetLockWidget->WidgetTree->ForEachWidget(
+			[this](UWidget* foundWidget) //lamda func
+			{
+				if (USizeBox* foundSizeBox = Cast<USizeBox>(foundWidget))
+				{
+					targetLockWidgetSize.X = foundSizeBox->GetWidthOverride(); //we can get width and height set from wbp
+					targetLockWidgetSize.Y = foundSizeBox->GetHeightOverride();
+				}
+			}
+		);
+	}
+	
+	screenPosition -= (targetLockWidgetSize / 2.f); //center
+
+	drawnTargetLockWidget->SetPositionInViewport(screenPosition, false);
+
+
 }
 
 void UHeroGameplayAbility_TargetLock::cancelTargetLockAbility()
