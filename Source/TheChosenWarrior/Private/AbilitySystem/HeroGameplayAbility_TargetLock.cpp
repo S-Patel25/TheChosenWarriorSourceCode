@@ -4,6 +4,7 @@
 #include "AbilitySystem/HeroGameplayAbility_TargetLock.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Characters/HeroCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "WarriorDebugHelpers.h"
 //doing most of the target lock functionality in C++ as its more performant considering this will be handled frame by frame (switching targets, animation poses, etc.)
@@ -16,12 +17,31 @@ void UHeroGameplayAbility_TargetLock::ActivateAbility(const FGameplayAbilitySpec
 
 void UHeroGameplayAbility_TargetLock::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
+	cleanUp();
+
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
 void UHeroGameplayAbility_TargetLock::tryLockOnTarget()
 {
 	getAvailableActorsToLock();
+
+	if (availableActorsToLock.IsEmpty())
+	{
+		cancelTargetLockAbility(); //if no targets found then we cancel
+		return;
+	}
+
+	currentLockedActor = getNearestTargetFromAvailableActors(availableActorsToLock); //has a valid lock on target at this point
+
+	if (currentLockedActor)
+	{
+		Debug::Print(currentLockedActor->GetActorNameOrLabel());
+	}
+	else
+	{
+		cancelTargetLockAbility();
+	}
 }
 
 void UHeroGameplayAbility_TargetLock::getAvailableActorsToLock()
@@ -54,4 +74,22 @@ void UHeroGameplayAbility_TargetLock::getAvailableActorsToLock()
 			}
 		}
 	}
+}
+
+AActor* UHeroGameplayAbility_TargetLock::getNearestTargetFromAvailableActors(const TArray<AActor*>& inAvailableActors)
+{
+	float closestDistance = 0.f;
+	return UGameplayStatics::FindNearestActor(getHeroCharacterFromActorInfo()->GetActorLocation(), inAvailableActors, closestDistance); //get nearest actor to target lock onto
+}
+
+void UHeroGameplayAbility_TargetLock::cancelTargetLockAbility()
+{
+	CancelAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true);
+}
+
+void UHeroGameplayAbility_TargetLock::cleanUp()
+{
+	availableActorsToLock.Empty(); //empty array (perfomant)
+
+	currentLockedActor = nullptr; //good to have this
 }

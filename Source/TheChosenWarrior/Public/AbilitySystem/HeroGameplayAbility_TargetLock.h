@@ -24,6 +24,10 @@ protected:
 private:
 	void tryLockOnTarget();
 	void getAvailableActorsToLock();
+	AActor* getNearestTargetFromAvailableActors(const TArray<AActor*>& inAvailableActors);
+
+	void cancelTargetLockAbility();
+	void cleanUp();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
 	float boxTraceDistance = 5000.f; //how far should line trace go!
@@ -39,4 +43,7 @@ private:
 
 	UPROPERTY()
 	TArray<AActor*> availableActorsToLock;
+
+	UPROPERTY()
+	AActor* currentLockedActor;
 };
