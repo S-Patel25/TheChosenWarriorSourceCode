@@ -136,5 +136,5 @@ bool UWarriorFunctionLibrary::isValidBlock(AActor* inAttacker, AActor* inDefende
 
 	const float dotResult = FVector::DotProduct(inAttacker->GetActorForwardVector(), inDefender->GetActorForwardVector());
 
-	return dotResult < 0.1f; //if less then 0 then it means they are facing each other so can block! (tweak numbers as needed)
+	return dotResult < -0.1f; //if less then 0 then it means they are facing each other so can block! (tweak numbers as needed)
 }
