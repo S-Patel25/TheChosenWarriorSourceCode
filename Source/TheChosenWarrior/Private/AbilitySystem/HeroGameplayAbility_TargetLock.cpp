@@ -5,6 +5,9 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Characters/HeroCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "Widgets/WarriorWidgetBase.h"
+#include "TheChosenWarriorHeroController.h"
+
 
 #include "WarriorDebugHelpers.h"
 //doing most of the target lock functionality in C++ as its more performant considering this will be handled frame by frame (switching targets, animation poses, etc.)
@@ -36,7 +39,7 @@ void UHeroGameplayAbility_TargetLock::tryLockOnTarget()
 
 	if (currentLockedActor)
 	{
-		Debug::Print(currentLockedActor->GetActorNameOrLabel());
+		drawTargetLockWidget();
 	}
 	else
 	{
@@ -82,6 +85,19 @@ AActor* UHeroGameplayAbility_TargetLock::getNearestTargetFromAvailableActors(con
 	return UGameplayStatics::FindNearestActor(getHeroCharacterFromActorInfo()->GetActorLocation(), inAvailableActors, closestDistance); //get nearest actor to target lock onto
 }
 
+void UHeroGameplayAbility_TargetLock::drawTargetLockWidget()
+{
+	if (!drawnTargetLockWidget) //only draw if not valid
+	{
+		checkf(targetLockWidgetClass, TEXT("Forgot to assign valid widget class!"))
+
+		drawnTargetLockWidget = CreateWidget<UWarriorWidgetBase>(getHeroControllerFromActorInfo(), targetLockWidgetClass);
+		check(drawnTargetLockWidget);
+
+		drawnTargetLockWidget->AddToViewport();
+	}
+}
+
 void UHeroGameplayAbility_TargetLock::cancelTargetLockAbility()
 {
 	CancelAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true);
@@ -92,4 +108,9 @@ void UHeroGameplayAbility_TargetLock::cleanUp()
 	availableActorsToLock.Empty(); //empty array (perfomant)
 
 	currentLockedActor = nullptr; //good to have this
+
+	if (drawnTargetLockWidget)
+	{
+		drawnTargetLockWidget->RemoveFromParent(); //will remove the lock in
+	}
 }

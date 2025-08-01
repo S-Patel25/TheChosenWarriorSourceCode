@@ -6,6 +6,7 @@
 #include "AbilitySystem/WarriorHeroGameplayAbility.h"
 #include "HeroGameplayAbility_TargetLock.generated.h"
 
+class UWarriorWidgetBase;
 /**
  * 
  */
@@ -25,6 +26,7 @@ private:
 	void tryLockOnTarget();
 	void getAvailableActorsToLock();
 	AActor* getNearestTargetFromAvailableActors(const TArray<AActor*>& inAvailableActors);
+	void drawTargetLockWidget();
 
 	void cancelTargetLockAbility();
 	void cleanUp();
@@ -41,9 +43,15 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
 	bool bShowPersistentShape = false;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
+	TSubclassOf<UWarriorWidgetBase> targetLockWidgetClass; //hard ref is ok here since its a very small icon
+
 	UPROPERTY()
 	TArray<AActor*> availableActorsToLock;
 
 	UPROPERTY()
 	AActor* currentLockedActor;
+
+	UPROPERTY()
+	UWarriorWidgetBase* drawnTargetLockWidget;
 };
