@@ -12,6 +12,7 @@
 #include "Components/SizeBox.h"
 #include "WarriorFunctionLibrary.h"
 #include "ChosenWarriorGameplayTags.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 #include "WarriorDebugHelpers.h"
@@ -42,6 +43,25 @@ void UHeroGameplayAbility_TargetLock::onTargetLockTick(float DeltaTime)
 	}
 
 	setTargetLockWidgetPosition();
+
+	const bool bShouldOverrideRotation = //not override if blocking or rolling
+	!UWarriorFunctionLibrary::NativeDoesActorHaveTag(getHeroCharacterFromActorInfo(), ChosenWarriorGameplayTags::Player_Status_Rolling)
+	&&
+	!UWarriorFunctionLibrary::NativeDoesActorHaveTag(getHeroCharacterFromActorInfo(), ChosenWarriorGameplayTags::Player_Status_Blocking);
+
+	if (bShouldOverrideRotation)
+	{
+		const FRotator lookAtRot = UKismetMathLibrary::FindLookAtRotation(
+			getHeroCharacterFromActorInfo()->GetActorLocation(),
+			currentLockedActor->GetActorLocation()
+		);
+
+		const FRotator currentControlRot = getHeroControllerFromActorInfo()->GetControlRotation();
+		const FRotator targetRot = FMath::RInterpTo(currentControlRot, lookAtRot, DeltaTime, targetLockRotationInterpSpeed); //make rotation oriented to the target lock
+
+		getHeroControllerFromActorInfo()->SetControlRotation(FRotator(targetRot.Pitch, targetRot.Yaw, 0.f)); //camera rot
+		getHeroCharacterFromActorInfo()->SetActorRotation(FRotator(0.f, targetRot.Yaw, 0.f));
+	}
 }
 
 void UHeroGameplayAbility_TargetLock::tryLockOnTarget()

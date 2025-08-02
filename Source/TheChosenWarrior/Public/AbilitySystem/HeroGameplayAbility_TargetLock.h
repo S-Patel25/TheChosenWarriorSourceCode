@@ -50,6 +50,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
 	TSubclassOf<UWarriorWidgetBase> targetLockWidgetClass; //hard ref is ok here since its a very small icon
 
+	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
+	float targetLockRotationInterpSpeed = 5.f;
+
 	UPROPERTY()
 	TArray<AActor*> availableActorsToLock;
 
