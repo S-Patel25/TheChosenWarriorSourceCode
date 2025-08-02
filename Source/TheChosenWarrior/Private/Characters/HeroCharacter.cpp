@@ -99,6 +99,9 @@ void AHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	warrirorEnhancedInputComponent->bindNativeInputAction(inputConfigDataAsset, ChosenWarriorGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
 	warrirorEnhancedInputComponent->bindNativeInputAction(inputConfigDataAsset, ChosenWarriorGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
 
+	warrirorEnhancedInputComponent->bindNativeInputAction(inputConfigDataAsset, ChosenWarriorGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Triggered, this, &ThisClass::Input_SwitchTargetTriggered);
+	warrirorEnhancedInputComponent->bindNativeInputAction(inputConfigDataAsset, ChosenWarriorGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Completed, this, &ThisClass::Input_SwitchTargetCompleted);
+
 	warrirorEnhancedInputComponent->bindAbilityInputAction(inputConfigDataAsset, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 
 
@@ -142,6 +145,16 @@ void AHeroCharacter::Input_Look(const FInputActionValue& InputActionValue)
 	{
 		AddControllerPitchInput(-lookAxisVector.Y);
 	}
+
+}
+
+void AHeroCharacter::Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue)
+{
+
+}
+
+void AHeroCharacter::Input_SwitchTargetCompleted(const FInputActionValue& InputActionValue)
+{
 
 }
 

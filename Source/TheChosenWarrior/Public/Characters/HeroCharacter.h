@@ -69,6 +69,9 @@ private:
 	void Input_Move(const FInputActionValue& InputActionValue); //actual movement methods
 	void Input_Look(const FInputActionValue& InputActionValue);
 
+	void Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue);
+	void Input_SwitchTargetCompleted(const FInputActionValue& InputActionValue);
+
 	void Input_AbilityInputPressed(FGameplayTag inInputTag); //ability inputs
 	void Input_AbilityInputReleased(FGameplayTag inInputTag);
 
