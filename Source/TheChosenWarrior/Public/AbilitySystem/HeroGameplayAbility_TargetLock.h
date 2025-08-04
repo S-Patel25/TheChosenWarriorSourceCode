@@ -7,6 +7,7 @@
 #include "HeroGameplayAbility_TargetLock.generated.h"
 
 class UWarriorWidgetBase;
+class UInputMappingContext;
 /**
  * 
  */
@@ -32,10 +33,12 @@ private:
 	void drawTargetLockWidget();
 	void setTargetLockWidgetPosition();
 	void initTargetLockMovement();
+	void initTargetLockMappingContext();
 
 	void cancelTargetLockAbility();
 	void cleanUp();
 	void resetTargetLockMovement();
+	void resetTargetLockMappingContext();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
 	float boxTraceDistance = 5000.f; //how far should line trace go!
@@ -57,6 +60,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
 	float targetLockMaxWalkSpeed = 250.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
+	UInputMappingContext* targetLockMappingContext;
 
 	UPROPERTY()
 	TArray<AActor*> availableActorsToLock;
