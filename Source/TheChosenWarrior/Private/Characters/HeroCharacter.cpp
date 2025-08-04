@@ -14,6 +14,7 @@
 #include "DataAssets/StartUpData/DataAsset_HeroStartUpData.h"
 #include "Components/Combat/HeroCombatComponent.h"
 #include "Components/UI/HeroUIComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
 
 
 #include "WarriorDebugHelpers.h"
@@ -150,12 +151,19 @@ void AHeroCharacter::Input_Look(const FInputActionValue& InputActionValue)
 
 void AHeroCharacter::Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue)
 {
-
+	switchDirection = InputActionValue.Get<FVector2D>();
 }
 
 void AHeroCharacter::Input_SwitchTargetCompleted(const FInputActionValue& InputActionValue)
 {
+	FGameplayEventData Data;
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+		this,
+		switchDirection.X > 0.f ? ChosenWarriorGameplayTags::Player_Event_SwitchTarget_Right : ChosenWarriorGameplayTags::Player_Event_SwitchTarget_Left, //get vector direction then add tag based on it
+		Data
+	);
 
+	
 }
 
 void AHeroCharacter::Input_AbilityInputPressed(FGameplayTag inInputTag)

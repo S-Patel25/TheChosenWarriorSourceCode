@@ -70,6 +70,31 @@ void UHeroGameplayAbility_TargetLock::onTargetLockTick(float DeltaTime)
 	}
 }
 
+void UHeroGameplayAbility_TargetLock::switchTarget(const FGameplayTag& inSwitchDirectionTag)
+{
+	getAvailableActorsToLock();
+
+	TArray<AActor*> actorsOnLeft;
+	TArray<AActor*> actorsOnRight;
+	AActor* newTargetToLock = nullptr;
+
+	getAvailableActorsAroundTarget(actorsOnLeft, actorsOnRight);
+
+	if (inSwitchDirectionTag == ChosenWarriorGameplayTags::Player_Event_SwitchTarget_Left)
+	{
+		newTargetToLock = getNearestTargetFromAvailableActors(actorsOnLeft); //based on our direction of switch
+	}
+	else
+	{
+		newTargetToLock = getNearestTargetFromAvailableActors(actorsOnRight);
+	}
+
+	if (newTargetToLock)
+	{
+		currentLockedActor = newTargetToLock; //once set, tick function will handle the rest
+	}
+}
+
 void UHeroGameplayAbility_TargetLock::tryLockOnTarget()
 {
 	getAvailableActorsToLock();
@@ -95,6 +120,8 @@ void UHeroGameplayAbility_TargetLock::tryLockOnTarget()
 
 void UHeroGameplayAbility_TargetLock::getAvailableActorsToLock()
 {
+	availableActorsToLock.Empty(); //empty as we need fresh array for switching
+
 	TArray<FHitResult> boxTraceHits; //will have the enemies we can target lock
 	 
 	UKismetSystemLibrary::BoxTraceMultiForObjects( //box trace mulitple to get enemies
@@ -118,8 +145,6 @@ void UHeroGameplayAbility_TargetLock::getAvailableActorsToLock()
 			if (hitActor != getHeroCharacterFromActorInfo()) //means its can be locked on
 			{
 				availableActorsToLock.AddUnique(hitActor);
-
-				Debug::Print(hitActor->GetActorNameOrLabel());
 			}
 		}
 	}
@@ -129,6 +154,36 @@ AActor* UHeroGameplayAbility_TargetLock::getNearestTargetFromAvailableActors(con
 {
 	float closestDistance = 0.f;
 	return UGameplayStatics::FindNearestActor(getHeroCharacterFromActorInfo()->GetActorLocation(), inAvailableActors, closestDistance); //get nearest actor to target lock onto
+}
+
+void UHeroGameplayAbility_TargetLock::getAvailableActorsAroundTarget(TArray<AActor*>& outActorsOnLeft, TArray<AActor*>& outActorsOnRight)
+{
+	if (!currentLockedActor || availableActorsToLock.IsEmpty())
+	{
+		cancelTargetLockAbility();
+		return;
+	}
+
+	const FVector playerLocation = getHeroCharacterFromActorInfo()->GetActorLocation();
+	const FVector playerToCurrentNormalized = (currentLockedActor->GetActorLocation() - playerLocation).GetSafeNormal();
+
+	for (AActor* availableActor : availableActorsToLock)
+	{
+		if (!availableActor || availableActor == currentLockedActor) continue; //if locked on or nothing there
+
+		const FVector playerToAvailableNormalized = (availableActor->GetActorLocation() - playerLocation).GetSafeNormal();
+
+		const FVector crossResult = FVector::CrossProduct(playerToCurrentNormalized, playerToAvailableNormalized);
+
+		if (crossResult.Z > 0.f) //if z greater means that target is on right
+		{
+			outActorsOnRight.AddUnique(availableActor);
+		}
+		else
+		{
+			outActorsOnLeft.AddUnique(availableActor);
+		}
+	}
 }
 
 void UHeroGameplayAbility_TargetLock::drawTargetLockWidget()
