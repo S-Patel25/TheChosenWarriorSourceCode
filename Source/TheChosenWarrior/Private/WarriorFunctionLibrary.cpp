@@ -138,3 +138,13 @@ bool UWarriorFunctionLibrary::isValidBlock(AActor* inAttacker, AActor* inDefende
 
 	return dotResult < -0.1f; //if less then 0 then it means they are facing each other so can block! (tweak numbers as needed)
 }
+
+bool UWarriorFunctionLibrary::applyGameplayEffectSpecHandleToTargetActor(AActor* inInstigator, AActor* inTargetActor, const FGameplayEffectSpecHandle& inSpecHandle)
+{
+	UWarriorAbilitySystemComponent* sourceASC = NativeGetWarriorASCFromActor(inInstigator);
+	UWarriorAbilitySystemComponent* targetASC = NativeGetWarriorASCFromActor(inTargetActor);
+
+	FActiveGameplayEffectHandle activeGameplayEffectHandle = sourceASC->ApplyGameplayEffectSpecToTarget(*inSpecHandle.Data, targetASC);
+
+	return activeGameplayEffectHandle.WasSuccessfullyApplied(); //handy helper function
+}
