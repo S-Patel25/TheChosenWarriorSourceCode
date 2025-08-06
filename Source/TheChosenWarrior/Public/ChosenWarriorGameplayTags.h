@@ -60,6 +60,7 @@ namespace ChosenWarriorGameplayTags //gameplay tags are a better way to handle i
 
 	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Status_Strafing);
 	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Status_UnderAttack);
+	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Status_Unblockable);
 
 
 
