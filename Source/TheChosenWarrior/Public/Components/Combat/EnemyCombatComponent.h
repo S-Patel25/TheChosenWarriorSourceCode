@@ -16,4 +16,7 @@ class THECHOSENWARRIOR_API UEnemyCombatComponent : public UPawnCombatComponent
 
 public:
 	virtual void OnHitTargetActor(AActor* hitActor) override;
+
+protected:
+	virtual void toggleBodyCollisionBoxCollision(bool bShouldEnable, EToggleDamageType toggleDamageType) override;
 };

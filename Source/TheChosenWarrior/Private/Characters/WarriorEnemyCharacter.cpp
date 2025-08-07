@@ -10,6 +10,7 @@
 #include "Components/WidgetComponent.h"
 #include "Widgets/WarriorWidgetBase.h"
 #include "Components/BoxComponent.h"
+#include "WarriorFunctionLibrary.h"
 
 #include "WarriorDebugHelpers.h"
 AWarriorEnemyCharacter::AWarriorEnemyCharacter()
@@ -94,7 +95,13 @@ UEnemyUIComponent* AWarriorEnemyCharacter::getEnemyUIComponent() const
 
 void AWarriorEnemyCharacter::onBodyCollisionBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-
+	if (APawn* hitPawn = Cast<APawn>(OtherActor))
+	{
+		if (UWarriorFunctionLibrary::isTargetPawnHostile(this, hitPawn))
+		{
+			enemyCombatComponent->OnHitTargetActor(hitPawn);
+		}
+	}
 }
 
 void AWarriorEnemyCharacter::initEnemyStartUpData()
