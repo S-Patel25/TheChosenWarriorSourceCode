@@ -22,8 +22,8 @@
 void UHeroGameplayAbility_TargetLock::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	tryLockOnTarget();
-	initTargetLockMovement();
-	initTargetLockMappingContext();
+	//initTargetLockMovement();
+	//initTargetLockMappingContext();
 
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
@@ -113,6 +113,8 @@ void UHeroGameplayAbility_TargetLock::tryLockOnTarget()
 	{
 		drawTargetLockWidget();
 		setTargetLockWidgetPosition();
+		initTargetLockMovement();
+		initTargetLockMappingContext();
 	}
 	else
 	{
