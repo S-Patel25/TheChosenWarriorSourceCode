@@ -9,6 +9,7 @@
 #include "Components/UI/EnemyUIComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Widgets/WarriorWidgetBase.h"
+#include "Components/BoxComponent.h"
 
 #include "WarriorDebugHelpers.h"
 AWarriorEnemyCharacter::AWarriorEnemyCharacter()
@@ -30,6 +31,16 @@ AWarriorEnemyCharacter::AWarriorEnemyCharacter()
 
 	enemyHealthWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("Enemy Health UI Widget Component");
 	enemyHealthWidgetComponent->SetupAttachment(GetMesh());
+
+	leftHandCollisionBox = CreateDefaultSubobject<UBoxComponent>("LeftHandCollisionBox");
+	leftHandCollisionBox->SetupAttachment(GetMesh()); //change later as not every enemy will have this
+	leftHandCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	leftHandCollisionBox->OnComponentBeginOverlap.AddUniqueDynamic(this, &ThisClass::onBodyCollisionBoxBeginOverlap);
+
+	rightHandCollisionBox = CreateDefaultSubobject<UBoxComponent>("RightHandCollisionBox");
+	rightHandCollisionBox->SetupAttachment(GetMesh()); //change later as not every enemy will have this
+	rightHandCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	rightHandCollisionBox->OnComponentBeginOverlap.AddUniqueDynamic(this, &ThisClass::onBodyCollisionBoxBeginOverlap);
 }
 
 UPawnCombatComponent* AWarriorEnemyCharacter::getPawnCombatComponent() const
@@ -54,6 +65,23 @@ void AWarriorEnemyCharacter::PossessedBy(AController* NewController)
 	initEnemyStartUpData();
 }
 
+#if WITH_EDITOR
+void AWarriorEnemyCharacter::PostEditChangeProperty(FPropertyChangedEvent& propertyChangedEvent) //will attach box collisions to hand for frost giant (or any place for other enemies!)
+{
+	Super::PostEditChangeProperty(propertyChangedEvent);
+
+	if (propertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass, leftHandCollisionBoxAttachBoneName))
+	{
+		leftHandCollisionBox->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, leftHandCollisionBoxAttachBoneName);
+	}
+
+	if (propertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass, rightHandCollisionBoxAttachBoneName))
+	{
+		rightHandCollisionBox->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, rightHandCollisionBoxAttachBoneName);
+	}
+}
+#endif
+
 UPawnUIComponent* AWarriorEnemyCharacter::getPawnUIComponent() const
 {
 	return enemyUIComponent;
@@ -62,6 +90,11 @@ UPawnUIComponent* AWarriorEnemyCharacter::getPawnUIComponent() const
 UEnemyUIComponent* AWarriorEnemyCharacter::getEnemyUIComponent() const
 {
 	return enemyUIComponent;
+}
+
+void AWarriorEnemyCharacter::onBodyCollisionBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+
 }
 
 void AWarriorEnemyCharacter::initEnemyStartUpData()
