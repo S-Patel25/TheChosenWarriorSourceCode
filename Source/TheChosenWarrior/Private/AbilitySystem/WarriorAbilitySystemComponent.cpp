@@ -15,16 +15,9 @@ void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& i
 	{
 		if (!abilitySpec.DynamicAbilityTags.HasTagExact(inInputTag)) continue; //make sure its the exact tag
 		
-		if (inInputTag.MatchesTag(ChosenWarriorGameplayTags::InputTag_Toggleable)) //how to handle abilities that are toggleable
+		if (inInputTag.MatchesTag(ChosenWarriorGameplayTags::InputTag_Toggleable) && abilitySpec.IsActive())
 		{
-			if (abilitySpec.IsActive())
-			{
-				CancelAbilityHandle(abilitySpec.Handle);
-			}
-			else
-			{
-				TryActivateAbility(abilitySpec.Handle);
-			}
+			CancelAbilityHandle(abilitySpec.Handle);
 		}
 		else
 		{
