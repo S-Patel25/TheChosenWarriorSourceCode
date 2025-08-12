@@ -91,7 +91,24 @@ void AWarriorProjectileBase::OnProjectileHit(UPrimitiveComponent* HitComponent, 
 
 void AWarriorProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (overlappedActors.Contains(OtherActor))
+	{
+		return;
+	}
 
+	overlappedActors.AddUnique(OtherActor);
+
+	if (APawn* hitPawn = Cast<APawn>(OtherActor))
+	{
+		FGameplayEventData Data;
+		Data.Instigator = GetInstigator();
+		Data.Target = hitPawn;
+
+		if (UWarriorFunctionLibrary::isTargetPawnHostile(GetInstigator(), hitPawn))
+		{
+			HandleApplyProjectileDamage(hitPawn, Data); //will handle damage and sitll go through enemies (rage slash abilty specfici)
+		}
+	}
 }
 
 void AWarriorProjectileBase::HandleApplyProjectileDamage(APawn* inHitPawn, const FGameplayEventData& inPayload)
@@ -103,7 +120,7 @@ void AWarriorProjectileBase::HandleApplyProjectileDamage(APawn* inHitPawn, const
 	{
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
 			inHitPawn,
-			ChosenWarriorGameplayTags::Shared_Event_SpawnProjectile,
+			ChosenWarriorGameplayTags::Shared_Event_HitReact,
 			inPayload
 		);
 	}
