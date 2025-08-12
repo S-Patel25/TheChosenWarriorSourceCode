@@ -21,7 +21,7 @@ public:
 	void OnAbilityInputReleased(const FGameplayTag& inInputTag);
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability", meta = (ApplyLevel = "1"))
-	void grantHeroWeaponAbilities(const TArray<FWarriorHeroAbilitySet>& inDefaultWeaponAbilities, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& outGrantedAbilitySpecHandles);
+	void grantHeroWeaponAbilities(const TArray<FWarriorHeroAbilitySet>& inDefaultWeaponAbilities, const TArray<FWarriorHeroSpecialAbilitySet>& inSpecialWeaponAbilities, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& outGrantedAbilitySpecHandles);
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability")
 	void removedGrantedHeroWeaponAbilities(UPARAM(ref) TArray<FGameplayAbilitySpecHandle>& inSpecHandlesToRemove); //adding UPARAM(ref) lets unreal know the var is not an out paramter, useful trick

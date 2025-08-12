@@ -43,7 +43,7 @@ void UWarriorAbilitySystemComponent::OnAbilityInputReleased(const FGameplayTag& 
 
 }
 
-void UWarriorAbilitySystemComponent::grantHeroWeaponAbilities(const TArray<FWarriorHeroAbilitySet>& inDefaultWeaponAbilities, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& outGrantedAbilitySpecHandles)
+void UWarriorAbilitySystemComponent::grantHeroWeaponAbilities(const TArray<FWarriorHeroAbilitySet>& inDefaultWeaponAbilities, const TArray<FWarriorHeroSpecialAbilitySet>& inSpecialWeaponAbilities, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& outGrantedAbilitySpecHandles)
 {
 	if (inDefaultWeaponAbilities.IsEmpty())
 	{
@@ -61,6 +61,19 @@ void UWarriorAbilitySystemComponent::grantHeroWeaponAbilities(const TArray<FWarr
 
 		outGrantedAbilitySpecHandles.AddUnique(GiveAbility(abilitySpec)); //grant ability then store it! (can remove abilities, etc.)
 	}
+
+	for (const FWarriorHeroSpecialAbilitySet& abilitySet : inSpecialWeaponAbilities)
+	{
+		if (!abilitySet.isValid()) continue;
+
+		FGameplayAbilitySpec abilitySpec(abilitySet.abilityToGrant); //same setup for granting abilities
+		abilitySpec.SourceObject = GetAvatarActor();
+		abilitySpec.Level = ApplyLevel;
+		abilitySpec.DynamicAbilityTags.AddTag(abilitySet.inputTag);
+
+		outGrantedAbilitySpecHandles.AddUnique(GiveAbility(abilitySpec)); //grant ability then store it! (can remove abilities, etc.)
+	}
+
 
 }
 
