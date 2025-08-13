@@ -53,4 +53,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary")
 	static bool applyGameplayEffectSpecHandleToTargetActor(AActor* inInstigator, AActor* inTargetActor, const FGameplayEffectSpecHandle& inSpecHandle);
+
+	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary", meta = (Latent, WorldContext = "worldContextObject", LatentInfo = "latentInfo", ExpandEnumAsExecs = "countdownInput|countdownOutput", totalTime = "1.0", updateInterval = "0.1")) //creating custom latent function to handle cooldown time for special abilities
+	static void countDown(const UObject* worldContextObject, float totalTime, float updateInterval, 
+		float& outRemainingTime, EWarriorCountDownActionInput countdownInput, 
+		UPARAM(DisplayName = "Output") EWarriorCountDownActionOutput & countdownOutput, FLatentActionInfo latentInfo);
 };

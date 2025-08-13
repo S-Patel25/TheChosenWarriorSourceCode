@@ -32,7 +32,7 @@ struct FWarriorHeroSpecialAbilitySet : public FWarriorHeroAbilitySet
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSoftObjectPtr<UMaterialInterface> abilityIconMaterial;
+	TSoftObjectPtr<UMaterialInterface> softAbilityIconMaterial;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (Categories = "Player.Cooldown")) //will limit tags seen (filter)
 	FGameplayTag abilityCooldownTag;

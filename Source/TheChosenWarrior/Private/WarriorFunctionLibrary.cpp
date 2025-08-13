@@ -8,6 +8,7 @@
 #include "GenericTeamAgentInterface.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "ChosenWarriorGameplayTags.h"
+#include "WarriorTypes/WarriorCountDownAction.h"
 
 #include "WarriorDebugHelpers.h"
 
@@ -147,4 +148,44 @@ bool UWarriorFunctionLibrary::applyGameplayEffectSpecHandleToTargetActor(AActor*
 	FActiveGameplayEffectHandle activeGameplayEffectHandle = sourceASC->ApplyGameplayEffectSpecToTarget(*inSpecHandle.Data, targetASC);
 
 	return activeGameplayEffectHandle.WasSuccessfullyApplied(); //handy helper function
+}
+
+void UWarriorFunctionLibrary::countDown(const UObject* worldContextObject, float totalTime, float updateInterval, float& outRemainingTime, EWarriorCountDownActionInput countdownInput, UPARAM(DisplayName = "Output") EWarriorCountDownActionOutput& countdownOutput, FLatentActionInfo latentInfo)
+{
+	UWorld* world = nullptr;
+
+	if (GEngine)
+	{
+		world = GEngine->GetWorldFromContextObject(worldContextObject, EGetWorldErrorMode::LogAndReturnNull);
+	}
+
+	if (!world)
+	{
+		return;
+	}
+
+	FLatentActionManager& latentActionManager = world->GetLatentActionManager();
+
+	FWarriorCountDownAction* foundAction = latentActionManager.FindExistingAction<FWarriorCountDownAction>(latentInfo.CallbackTarget, latentInfo.UUID);
+
+	if (countdownInput == EWarriorCountDownActionInput::Start)
+	{
+		if (!foundAction) //create new action if not found
+		{
+			latentActionManager.AddNewAction(
+				latentInfo.CallbackTarget,
+				latentInfo.UUID,
+				new FWarriorCountDownAction(totalTime, updateInterval, outRemainingTime, countdownOutput, latentInfo) //using new keyword won't cause mem leak as its already managed by latent manager
+			);
+		}
+	}
+
+	if (countdownInput == EWarriorCountDownActionInput::Cancel)
+	{
+		if (foundAction)
+		{
+			foundAction->cancelAction();
+		}
+	}
+
 }
