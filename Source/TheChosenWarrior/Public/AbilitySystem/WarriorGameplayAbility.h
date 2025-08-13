@@ -45,4 +45,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability", meta = (DisplayName = "Apply Gameplay Effect Spec Handle To Target Actor", ExpandEnumAsExecs = "outSuccessType"))
 	FActiveGameplayEffectHandle BP_ApplyEffectSpecHandleToTarget(AActor* targetActor, const FGameplayEffectSpecHandle& inSpecHandle, EWarriorSuccessType& outSuccessType);
 
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability")
+	void applyGameplayEffectSpecHandleToHitResults(const FGameplayEffectSpecHandle& inSpecHandle, const TArray<FHitResult>& inHitResults); //apply to multiple targets ("AOE")
+
 };
