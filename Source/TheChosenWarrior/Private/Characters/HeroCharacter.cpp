@@ -103,6 +103,9 @@ void AHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	warrirorEnhancedInputComponent->bindNativeInputAction(inputConfigDataAsset, ChosenWarriorGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Triggered, this, &ThisClass::Input_SwitchTargetTriggered);
 	warrirorEnhancedInputComponent->bindNativeInputAction(inputConfigDataAsset, ChosenWarriorGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Completed, this, &ThisClass::Input_SwitchTargetCompleted);
 
+
+	warrirorEnhancedInputComponent->bindNativeInputAction(inputConfigDataAsset, ChosenWarriorGameplayTags::InputTag_PickUp_Stones, ETriggerEvent::Started, this, &ThisClass::Input_PickUpStonesStarted);
+
 	warrirorEnhancedInputComponent->bindAbilityInputAction(inputConfigDataAsset, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 
 
@@ -164,6 +167,17 @@ void AHeroCharacter::Input_SwitchTargetCompleted(const FInputActionValue& InputA
 	);
 
 	
+}
+
+void AHeroCharacter::Input_PickUpStonesStarted(const FInputActionValue& InputActionValue)
+{
+	FGameplayEventData Data;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+		this,
+		ChosenWarriorGameplayTags::Player_Event_ConsumeStones,
+		Data
+	);
 }
 
 void AHeroCharacter::Input_AbilityInputPressed(FGameplayTag inInputTag)
