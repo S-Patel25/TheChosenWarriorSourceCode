@@ -8,6 +8,21 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "AbilitySystem/WarriorHeroGameplayAbility.h"
 
+void AWarriorStoneBase::Consume(UWarriorAbilitySystemComponent* abilitySystemComponent, int32 applyLevel)
+{
+	check(stoneGameplayEffectClass);
+
+	UGameplayEffect* effectCDO = stoneGameplayEffectClass->GetDefaultObject<UGameplayEffect>();
+
+	abilitySystemComponent->ApplyGameplayEffectToSelf(
+		effectCDO,
+		applyLevel,
+		abilitySystemComponent->MakeEffectContext()
+	);
+
+	BP_onStoneConsumed();
+}
+
 void AWarriorStoneBase::onPickUpCollisionSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (AHeroCharacter* overLappedHeroCharacter = Cast<AHeroCharacter>(OtherActor))

@@ -49,3 +49,21 @@ void UHeroGameplayAbility_PickUpStones::collectStones()
 		CancelAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true);
 	}
 }
+
+void UHeroGameplayAbility_PickUpStones::consumeStones()
+{
+	if (collectedStones.IsEmpty())
+	{
+		CancelAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true);
+		return;
+	}
+
+	for (AWarriorStoneBase* collectedStone : collectedStones)
+	{
+		if (collectedStone)
+		{
+			collectedStone->Consume(getWarriorAbilitySystemComponentFromActorInfo(), GetAbilityLevel());
+		}
+	}
+
+}

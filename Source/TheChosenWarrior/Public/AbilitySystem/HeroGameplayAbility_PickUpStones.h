@@ -25,6 +25,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void collectStones();
+
+	UFUNCTION(BlueprintCallable)
+	void consumeStones();
 	
 
 private:
