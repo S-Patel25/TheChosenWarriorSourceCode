@@ -13,5 +13,7 @@ UCLASS()
 class THECHOSENWARRIOR_API ATheChosenWarriorBaseGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	ATheChosenWarriorBaseGameMode();
 };
