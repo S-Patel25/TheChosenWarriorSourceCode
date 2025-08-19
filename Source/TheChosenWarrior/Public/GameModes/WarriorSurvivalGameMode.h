@@ -68,6 +68,11 @@ private:
 	bool hasFinishedAllWaves() const;
 	void preLoadNextWaveEnemies();
 	FWarriorEnemyWaveSpawnerTableRow* getCurrentWaveSpawnerTableRow() const;
+	int32 trySpawnWaveEnemies();
+	bool shouldKeepSpawnEnemies();
+
+	UFUNCTION() //reminder: dynamic multicast functions need this!!
+	void OnEnemyDestroyed(AActor* destroyedActor);
 
 	UPROPERTY()
 	EWarriorSurvivalGameModeState currentSurvivalGameModeState;
@@ -83,6 +88,15 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
 	int32 currentWaveCount = 1;
+
+	UPROPERTY()
+	int32 currentSpawnedEnemiesCounter = 0;
+
+	UPROPERTY()
+	int32 totalSpawnEnemiesThisWaveCounter = 0;
+
+	UPROPERTY()
+	TArray<AActor*> targetPointsArray;
 
 	UPROPERTY()
 	float timePassedSinceStart = 0.f;
