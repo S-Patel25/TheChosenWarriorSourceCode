@@ -66,6 +66,8 @@ protected:
 private:
 	void setCurrentSurvivalGameModeState(EWarriorSurvivalGameModeState inState);
 	bool hasFinishedAllWaves() const;
+	void preLoadNextWaveEnemies();
+	FWarriorEnemyWaveSpawnerTableRow* getCurrentWaveSpawnerTableRow() const;
 
 	UPROPERTY()
 	EWarriorSurvivalGameModeState currentSurvivalGameModeState;
@@ -93,5 +95,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
 	float waveCompletedWaitTime = 5.f;
+
+	UPROPERTY()
+	TMap< TSoftClassPtr < AWarriorEnemyCharacter >, UClass* > preLoadedEnemyClassMap; //since async doesn't keep in memory, need to make tmap to access
+
 
 };

@@ -2,6 +2,10 @@
 
 
 #include "GameModes/WarriorSurvivalGameMode.h"
+#include "Engine/AssetManager.h"
+#include "Characters/WarriorEnemyCharacter.h"
+
+#include "WarriorDebugHelpers.h"
 
 void AWarriorSurvivalGameMode::BeginPlay()
 {
@@ -12,6 +16,8 @@ void AWarriorSurvivalGameMode::BeginPlay()
 	setCurrentSurvivalGameModeState(EWarriorSurvivalGameModeState::WaitSpawnNewWave);
 
 	totalWavesToSpawn = enemyWaveSpawnerDataTable->GetRowNames().Num();
+
+	preLoadNextWaveEnemies();
 
 }
 
@@ -59,6 +65,7 @@ void AWarriorSurvivalGameMode::Tick(float DeltaTime)
 			else
 			{
 				setCurrentSurvivalGameModeState(EWarriorSurvivalGameModeState::WaitSpawnNewWave);
+				preLoadNextWaveEnemies();
 			}
 		}
 	}
@@ -74,4 +81,42 @@ void AWarriorSurvivalGameMode::setCurrentSurvivalGameModeState(EWarriorSurvivalG
 bool AWarriorSurvivalGameMode::hasFinishedAllWaves() const
 {
 	return currentWaveCount > totalWavesToSpawn;
+}
+
+void AWarriorSurvivalGameMode::preLoadNextWaveEnemies()
+{
+	if (hasFinishedAllWaves())
+	{
+		return;
+	}
+
+	for (const FWarriorEnemyWaveSpawnerInfo& spawnerInfo : getCurrentWaveSpawnerTableRow()->enemyWaveSpawnerDefinitions)
+	{
+		if (spawnerInfo.softEnemyClassToSpawn.IsNull()) continue;
+
+		UAssetManager::GetStreamableManager().RequestAsyncLoad(
+			spawnerInfo.softEnemyClassToSpawn.ToSoftObjectPath(),
+			FStreamableDelegate::CreateLambda(
+				[spawnerInfo, this]()
+				{
+					if (UClass* loadedEnemyClass = spawnerInfo.softEnemyClassToSpawn.Get())
+					{
+						preLoadedEnemyClassMap.Emplace(spawnerInfo.softEnemyClassToSpawn, loadedEnemyClass);
+						Debug::Print(loadedEnemyClass->GetName() + TEXT(" is loaded!"));
+					}
+				}
+			)
+		);
+	}
+}
+
+FWarriorEnemyWaveSpawnerTableRow* AWarriorSurvivalGameMode::getCurrentWaveSpawnerTableRow() const
+{
+	const FName rowName = FName(TEXT("Wave") + FString::FromInt(currentWaveCount));
+
+	FWarriorEnemyWaveSpawnerTableRow* foundRow = enemyWaveSpawnerDataTable->FindRow<FWarriorEnemyWaveSpawnerTableRow>(rowName, FString());
+
+	checkf(foundRow, TEXT("Could not find valid row in the Data Table!"));
+
+	return foundRow;
 }
