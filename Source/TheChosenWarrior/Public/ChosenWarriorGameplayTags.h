@@ -1,4 +1,4 @@
-// All Rights Reserved
+ // All Rights Reserved
 
 #pragma once
 
@@ -112,6 +112,11 @@ namespace ChosenWarriorGameplayTags //gameplay tags are a better way to handle i
 	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_ContinueAttack_Light);
 	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_ContinueAttack_Light);
 	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Event_TriggerAttack_Light);
+
+	/* Game Data Tags */
+	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameData_Level_SurvivalGameModeMap);
+	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameData_Level_MainMenuMap);
+	THECHOSENWARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameData_Level_NormalMap);
 
 
 }

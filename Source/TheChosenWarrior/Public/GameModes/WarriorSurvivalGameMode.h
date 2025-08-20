@@ -69,7 +69,7 @@ private:
 	void preLoadNextWaveEnemies();
 	FWarriorEnemyWaveSpawnerTableRow* getCurrentWaveSpawnerTableRow() const;
 	int32 trySpawnWaveEnemies();
-	bool shouldKeepSpawnEnemies();
+	bool shouldKeepSpawnEnemies() const;
 
 	UFUNCTION() //reminder: dynamic multicast functions need this!!
 	void OnEnemyDestroyed(AActor* destroyedActor);
@@ -104,7 +104,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
 	float spawnNewWaveWaitTime = 5.f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
 	float spawnEnemiesDelayTime = 2.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
@@ -113,5 +113,7 @@ private:
 	UPROPERTY()
 	TMap< TSoftClassPtr < AWarriorEnemyCharacter >, UClass* > preLoadedEnemyClassMap; //since async doesn't keep in memory, need to make tmap to access
 
-
+public:
+	UFUNCTION(BlueprintCallable)
+	void registerSpawnedEnemies(const TArray<AWarriorEnemyCharacter*>& inEnemiesToRegister);
 };

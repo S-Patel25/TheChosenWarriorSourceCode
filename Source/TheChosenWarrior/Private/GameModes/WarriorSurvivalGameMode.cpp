@@ -109,7 +109,7 @@ void AWarriorSurvivalGameMode::preLoadNextWaveEnemies()
 					if (UClass* loadedEnemyClass = spawnerInfo.softEnemyClassToSpawn.Get())
 					{
 						preLoadedEnemyClassMap.Emplace(spawnerInfo.softEnemyClassToSpawn, loadedEnemyClass);
-						//Debug::Print(loadedEnemyClass->GetName() + TEXT(" is loaded!"));
+						Debug::Print(loadedEnemyClass->GetName() + TEXT(" is loaded!"));
 					}
 				}
 			)
@@ -182,7 +182,7 @@ int32 AWarriorSurvivalGameMode::trySpawnWaveEnemies()
 
 }
 
-bool AWarriorSurvivalGameMode::shouldKeepSpawnEnemies()
+bool AWarriorSurvivalGameMode::shouldKeepSpawnEnemies() const
 {
 	return totalSpawnEnemiesThisWaveCounter < getCurrentWaveSpawnerTableRow()->totalEnemyToSpawnThisWave;
 }
@@ -190,6 +190,8 @@ bool AWarriorSurvivalGameMode::shouldKeepSpawnEnemies()
 void AWarriorSurvivalGameMode::OnEnemyDestroyed(AActor* destroyedActor)
 {
 	currentSpawnedEnemiesCounter--;
+
+	Debug::Print(FString::Printf(TEXT("current: %i, total: %i"), currentSpawnedEnemiesCounter, totalSpawnEnemiesThisWaveCounter));
 
 	if (shouldKeepSpawnEnemies())
 	{
@@ -201,5 +203,18 @@ void AWarriorSurvivalGameMode::OnEnemyDestroyed(AActor* destroyedActor)
 		currentSpawnedEnemiesCounter = 0;
 
 		setCurrentSurvivalGameModeState(EWarriorSurvivalGameModeState::WaveCompleted);
+	}
+}
+
+void AWarriorSurvivalGameMode::registerSpawnedEnemies(const TArray<AWarriorEnemyCharacter*>& inEnemiesToRegister)
+{
+	for (AWarriorEnemyCharacter* spawnedEnemy : inEnemiesToRegister)
+	{
+		if (spawnedEnemy) //fix issue with not registering spawned enemy from boss
+		{
+			currentSpawnedEnemiesCounter++;
+
+			spawnedEnemy->OnDestroyed.AddUniqueDynamic(this, &ThisClass::OnEnemyDestroyed);
+		}
 	}
 }

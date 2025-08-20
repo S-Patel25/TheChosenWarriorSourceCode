@@ -104,4 +104,9 @@ namespace ChosenWarriorGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_ContinueAttack_Light, "InputTag.ContinueAttack.Light");
 	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_ContinueAttack_Light, "Player.Ability.ContinueAttack.Light");
 	UE_DEFINE_GAMEPLAY_TAG(Player_Event_TriggerAttack_Light, "Player.Event.TriggerAttack.Light");
+
+	/* Game Data Tags */
+	UE_DEFINE_GAMEPLAY_TAG(GameData_Level_SurvivalGameModeMap, "GameData.Level.SurvivalGameModeMap");
+	UE_DEFINE_GAMEPLAY_TAG(GameData_Level_MainMenuMap, "GameData.Level.MainMenuMap");
+	UE_DEFINE_GAMEPLAY_TAG(GameData_Level_NormalMap, "GameData.Level.NormalMap");
 }
