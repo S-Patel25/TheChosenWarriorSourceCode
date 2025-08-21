@@ -203,3 +203,40 @@ UWarriorGameInstance* UWarriorFunctionLibrary::getWarriorGameInstance(const UObj
 
 	return nullptr;
 }
+
+void UWarriorFunctionLibrary::toggleInputMode(const UObject* worldContextObject, EWarriorInputMode inInputMode)
+{
+	APlayerController* playerController = nullptr;
+
+	if (GEngine)
+	{
+		if (UWorld* World = GEngine->GetWorldFromContextObject(worldContextObject, EGetWorldErrorMode::LogAndReturnNull))
+		{
+			playerController = World->GetFirstPlayerController();
+		}
+	}
+
+	if (!playerController)
+	{
+		return;
+	}
+
+	FInputModeGameOnly gameOnlyMode;
+	FInputModeUIOnly UIOnlyMode;
+
+	switch (inInputMode)
+	{
+	case EWarriorInputMode::GameOnly:
+		playerController->SetInputMode(gameOnlyMode);
+		playerController->bShowMouseCursor = false; //let player control again
+
+		break;
+	case EWarriorInputMode::UIOnly:
+		playerController->SetInputMode(UIOnlyMode);
+		playerController->bShowMouseCursor = true;
+
+		break;
+	default:
+		break;
+	}
+}

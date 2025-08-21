@@ -62,4 +62,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Warrior|FunctionLibrary", meta = (WorldContext = "worldContextObject"))
 	static UWarriorGameInstance* getWarriorGameInstance(const UObject* worldContextObject);
+
+	UFUNCTION(BlueprintCallable, Category = "Warrior|FunctionLibrary", meta = (WorldContext = "worldContextObject"))
+	static void toggleInputMode(const UObject* worldContextObject, EWarriorInputMode inInputMode);
 };

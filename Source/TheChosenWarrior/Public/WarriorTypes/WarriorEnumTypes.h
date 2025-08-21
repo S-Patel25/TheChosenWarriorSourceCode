@@ -34,11 +34,17 @@ enum class EWarriorCountDownActionOutput : uint8
 	Completed,
 	Cancelled
 };
-UENUM()
+UENUM(BlueprintType)
 enum class EWarriorGameDifficulty : uint8
 {
 	Easy,
 	Normal,
 	Hard,
 	Warrior
+};
+UENUM(BlueprintType)
+enum class EWarriorInputMode : uint8
+{
+	GameOnly,
+	UIOnly
 };
