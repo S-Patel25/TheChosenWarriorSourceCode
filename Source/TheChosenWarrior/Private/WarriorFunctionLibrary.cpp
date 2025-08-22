@@ -10,6 +10,8 @@
 #include "ChosenWarriorGameplayTags.h"
 #include "WarriorTypes/WarriorCountDownAction.h"
 #include "WarriorGameInstance.h"
+#include "Kismet/GameplayStatics.h"
+#include "SaveGame/WarriorSaveGame.h"
 
 #include "WarriorDebugHelpers.h"
 
@@ -239,4 +241,37 @@ void UWarriorFunctionLibrary::toggleInputMode(const UObject* worldContextObject,
 	default:
 		break;
 	}
+}
+
+void UWarriorFunctionLibrary::saveCurrentGameDifficulty(EWarriorGameDifficulty inDifficultyToSave)
+{
+	USaveGame* saveGameObject = UGameplayStatics::CreateSaveGameObject(UWarriorSaveGame::StaticClass());
+
+	if (UWarriorSaveGame* warriorSaveGameObject = Cast<UWarriorSaveGame>(saveGameObject))
+	{
+		warriorSaveGameObject->savedCurrentGameDifficulty = inDifficultyToSave;
+
+		const bool bWasSaved = UGameplayStatics::SaveGameToSlot(warriorSaveGameObject, ChosenWarriorGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0); //since we're just saving enum, good to use, but not for large data!
+
+		Debug::Print(bWasSaved ? TEXT("Saved") : TEXT("Not saved"));
+	}
+}
+
+bool UWarriorFunctionLibrary::tryLoadSaveGameDifficulty(EWarriorGameDifficulty& outSavedDifficulty)
+{
+	if (UGameplayStatics::DoesSaveGameExist(ChosenWarriorGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0))
+	{
+		USaveGame* saveGameObject = UGameplayStatics::LoadGameFromSlot(ChosenWarriorGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0);
+
+		if (UWarriorSaveGame* warriorSaveGameObject = Cast<UWarriorSaveGame>(saveGameObject))
+		{
+			outSavedDifficulty = warriorSaveGameObject->savedCurrentGameDifficulty;
+
+			Debug::Print(TEXT("loading works!"), FColor::Green);
+
+			return true;
+		}
+	}
+
+	return false;
 }
