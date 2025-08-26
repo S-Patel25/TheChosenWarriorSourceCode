@@ -33,7 +33,13 @@ class THECHOSENWARRIOR_API UWarriorGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
+public:
+	virtual void Init() override;
+
 protected:
+	virtual void onPreLoadMap(const FString& mapName); //pre load the map async
+	virtual void onDestinationWorldLoaded(UWorld* loadedWorld);
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FWarriorGameLevelSet> gameLevelSets;
 
