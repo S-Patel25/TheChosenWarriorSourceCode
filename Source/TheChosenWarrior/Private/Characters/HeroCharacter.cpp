@@ -87,12 +87,14 @@ void AHeroCharacter::PossessedBy(AController* NewController)
 				{
 				case EWarriorGameDifficulty::Easy:
 					abilityApplyLevel = 4;
+					Debug::Print(TEXT("Easy!"));
 					break;
 				case EWarriorGameDifficulty::Normal:
 					abilityApplyLevel = 3;
 					break;
 				case EWarriorGameDifficulty::Hard:
 					abilityApplyLevel = 2;
+					Debug::Print(TEXT("Hard!"));
 					break;
 				case EWarriorGameDifficulty::Warrior:
 					abilityApplyLevel = 1;

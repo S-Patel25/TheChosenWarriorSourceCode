@@ -7,8 +7,21 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/TargetPoint.h"
 #include "NavigationSystem.h"
+#include "WarriorFunctionLibrary.h"
 
 #include "WarriorDebugHelpers.h"
+
+void AWarriorSurvivalGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+	Super::InitGame(MapName, Options, ErrorMessage);
+
+	EWarriorGameDifficulty savedGameDifficulty;
+
+	if(UWarriorFunctionLibrary::tryLoadSaveGameDifficulty(savedGameDifficulty))
+	{
+		currentGameDifficulty = savedGameDifficulty;
+	}
+}
 
 void AWarriorSurvivalGameMode::BeginPlay()
 {

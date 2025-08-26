@@ -60,6 +60,7 @@ class THECHOSENWARRIOR_API AWarriorSurvivalGameMode : public ATheChosenWarriorBa
 	GENERATED_BODY()
 
 protected:
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
