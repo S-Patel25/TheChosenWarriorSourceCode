@@ -35,8 +35,6 @@ TSoftObjectPtr<UWorld> UWarriorGameInstance::getGameLevelByTag(FGameplayTag inTa
 
         if (gameLevelSet.levelTag == inTag)
         {
-            UE_LOG(LogTemp, Warning, TEXT("Returning level: %s"),
-                *gameLevelSet.Level.ToSoftObjectPath().ToString());
            return gameLevelSet.Level;
         }
     }
